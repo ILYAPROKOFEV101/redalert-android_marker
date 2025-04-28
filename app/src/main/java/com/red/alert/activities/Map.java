@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.red.alert.R;
+import com.red.alert.activities.settings.alerts.MarkerIconCache;
 import com.red.alert.config.Logging;
 import com.red.alert.config.RecentAlerts;
 import com.red.alert.config.ThreatTypes;
@@ -320,10 +322,25 @@ public class Map extends AppCompatActivity implements OnMapsSdkInitializedCallba
                 }
 
                 // Add marker to map
-                mMap.addMarker(new MarkerOptions()
-                        .position(location)
-                        .title(localizedName)
-                        .snippet(tooltip));
+                // Добавляем маркер на карту
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      mMap.addMarker(new MarkerOptions()
+                                              .position(location)
+                                              .title(localizedName)
+                                              .icon(MarkerIconCache.getMarkerIcon(
+                                                      Map.this,
+                                                      R.drawable.location,
+                                                      Color.parseColor("#FF0000"),
+                                                      120,
+                                                      120
+                                              ))
+
+                                      );
+                                  }
+                              });
+
 
                 // Include location in zoom boundaries
                 builder.include(location);
